@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Experiment</title>
+
+        <script src="jspsych-6.3.0/jspsych.js"></script>
+        <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
+        <script src="jspsych-6.3.0/plugins/jspsych-image-button-response.js"></script>
+        <link rel="stylesheet" href="jspsych-6.3.0/css/jspsych.css">
+        <style>
+            img{
+                width: 80%;
+            };
+            p{
+                font-size: 160%;
+            };
+        </style>
+
+    </head>
+    <body></body>
+    <script>
+
+        // create JsPsych instance with preload and ID //
+        var timeline = [];
+
+        var preload = {
+            type: 'preload',
+            auto_preload: true
+        };
+        timeline.push(preload);
+
+        // create noun learning for each testing item //
+        function make_noun_training(meanings,words,images) {
+    /* noun training trials */
+    // 5x each noun = 10 trials
+    noun_training_trials = []
+    for (var reps = 0; reps < 5; reps++) {
+        for (var i = 0; i < meanings.length; i++) {
+            noun_training_trials.push(
+                {   meaning: meanings[i],
+                    image: images[i],
+                    word: words[i]
+                }
+            )
+        }
+    }
+    /* noun training procedure */
+    var noun_training = {
+        timeline: [
+            // show image and word
+            {
+                type: 'image-button-response',
+                stimulus: jsPsych.timelineVariable('image'),
+                prompt: jsPsych.timelineVariable('word'),
+                choices: ['Next'],
+                button_hide: true,
+                trial_duration: 2000
+            },
+            // show image and word and next button
+            {
+                type: 'image-button-response',
+                stimulus: jsPsych.timelineVariable('image'),
+                prompt: jsPsych.timelineVariable('word'),
+                choices: ['Next']
+            }
+        ],
+        timeline_variables: noun_training_trials,
+        randomize_order: true,
+        repetitions: 1
+    };
+    return noun_training;
+};
+        
+       let noun_training_apple = noun_training(noun_meanings,words_apple,images_apple);
+
+       let noun_training_banana = noun_training(noun_meanings,words_banana,images_banana);
+
+        // create number learning //
+
+        // create numeral extrapolation //
+
+        // questionnaire debrief //
+
+        // thank you and finish //
+
+        // create and fill timeline //
+        timeline.push(noun_training_apple);
+        timeline.push(noun_training_banana);
+
+        // start the experiment //
+        jsPsych.init({
+            timeline: timeline,
+            override_safe_mode: true
+        });
+
+    </script>
+</html>
